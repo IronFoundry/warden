@@ -6,19 +6,19 @@ module Warden
 
     class CopyInRequest
       include Warden::Protocol::BaseMessage
-
-
-      required :handle, :string, 1
-      required :src_path, :string, 2
-      required :dst_path, :string, 3
-
     end
 
     class CopyInResponse
       include Warden::Protocol::BaseMessage
+    end
 
+    class CopyInRequest
+      required :handle, :string, 1
+      required :src_path, :string, 2
+      required :dst_path, :string, 3
+    end
 
-
+    class CopyInResponse
     end
   end
 end
@@ -30,20 +30,20 @@ module Warden
 
     class CopyOutRequest
       include Warden::Protocol::BaseMessage
-
-
-      required :handle, :string, 1
-      required :src_path, :string, 2
-      required :dst_path, :string, 3
-      optional :owner, :string, 4
-
     end
 
     class CopyOutResponse
       include Warden::Protocol::BaseMessage
+    end
 
+    class CopyOutRequest
+      required :handle, :string, 1
+      required :src_path, :string, 2
+      required :dst_path, :string, 3
+      optional :owner, :string, 4
+    end
 
-
+    class CopyOutResponse
     end
   end
 end
@@ -56,7 +56,6 @@ module Warden
     class CreateRequest
       include Warden::Protocol::BaseMessage
 
-
       class BindMount
         include Warden::Protocol::BaseMessage
 
@@ -64,27 +63,29 @@ module Warden
           RO = 0
           RW = 1
         end
+      end
+    end
 
+    class CreateResponse
+      include Warden::Protocol::BaseMessage
+    end
+
+    class CreateRequest
+
+      class BindMount
         required :src_path, :string, 1
         required :dst_path, :string, 2
         required :mode, CreateRequest::BindMount::Mode, 3
-
       end
-
       repeated :bind_mounts, CreateRequest::BindMount, 1
       optional :grace_time, :uint32, 2
       optional :handle, :string, 3
       optional :network, :string, 4
       optional :rootfs, :string, 5
-
     end
 
     class CreateResponse
-      include Warden::Protocol::BaseMessage
-
-
       required :handle, :string, 1
-
     end
   end
 end
@@ -96,17 +97,17 @@ module Warden
 
     class DestroyRequest
       include Warden::Protocol::BaseMessage
-
-
-      required :handle, :string, 1
-
     end
 
     class DestroyResponse
       include Warden::Protocol::BaseMessage
+    end
 
+    class DestroyRequest
+      required :handle, :string, 1
+    end
 
-
+    class DestroyResponse
     end
   end
 end
@@ -118,18 +119,18 @@ module Warden
 
     class EchoRequest
       include Warden::Protocol::BaseMessage
-
-
-      required :message, :string, 1
-
     end
 
     class EchoResponse
       include Warden::Protocol::BaseMessage
+    end
 
-
+    class EchoRequest
       required :message, :string, 1
+    end
 
+    class EchoResponse
+      required :message, :string, 1
     end
   end
 end
@@ -141,12 +142,12 @@ module Warden
 
     class ErrorResponse
       include Warden::Protocol::BaseMessage
+    end
 
-
+    class ErrorResponse
       optional :message, :string, 2
       optional :data, :string, 4
       repeated :backtrace, :string, 3
-
     end
   end
 end
@@ -158,20 +159,35 @@ module Warden
 
     class InfoRequest
       include Warden::Protocol::BaseMessage
-
-
-      required :handle, :string, 1
-
     end
 
     class InfoResponse
       include Warden::Protocol::BaseMessage
 
-
       class MemoryStat
         include Warden::Protocol::BaseMessage
+      end
 
+      class CpuStat
+        include Warden::Protocol::BaseMessage
+      end
 
+      class DiskStat
+        include Warden::Protocol::BaseMessage
+      end
+
+      class BandwidthStat
+        include Warden::Protocol::BaseMessage
+      end
+    end
+
+    class InfoRequest
+      required :handle, :string, 1
+    end
+
+    class InfoResponse
+
+      class MemoryStat
         optional :cache, :uint64, 1
         optional :rss, :uint64, 2
         optional :mapped_file, :uint64, 3
@@ -200,39 +216,25 @@ module Warden
         optional :total_inactive_file, :uint64, 26
         optional :total_active_file, :uint64, 27
         optional :total_unevictable, :uint64, 28
-
       end
 
       class CpuStat
-        include Warden::Protocol::BaseMessage
-
-
         optional :usage, :uint64, 1
         optional :user, :uint64, 2
         optional :system, :uint64, 3
-
       end
 
       class DiskStat
-        include Warden::Protocol::BaseMessage
-
-
         optional :bytes_used, :uint64, 1
         optional :inodes_used, :uint64, 2
-
       end
 
       class BandwidthStat
-        include Warden::Protocol::BaseMessage
-
-
         optional :in_rate, :uint64, 1
         optional :in_burst, :uint64, 2
         optional :out_rate, :uint64, 3
         optional :out_burst, :uint64, 4
-
       end
-
       optional :state, :string, 10
       repeated :events, :string, 20
       optional :host_ip, :string, 30
@@ -243,7 +245,6 @@ module Warden
       optional :disk_stat, InfoResponse::DiskStat, 42
       optional :bandwidth_stat, InfoResponse::BandwidthStat, 43
       repeated :job_ids, :uint64, 44
-
     end
   end
 end
@@ -255,21 +256,21 @@ module Warden
 
     class LimitBandwidthRequest
       include Warden::Protocol::BaseMessage
-
-
-      required :handle, :string, 1
-      required :rate, :uint64, 2
-      required :burst, :uint64, 3
-
     end
 
     class LimitBandwidthResponse
       include Warden::Protocol::BaseMessage
+    end
 
+    class LimitBandwidthRequest
+      required :handle, :string, 1
+      required :rate, :uint64, 2
+      required :burst, :uint64, 3
+    end
 
+    class LimitBandwidthResponse
       required :rate, :uint64, 1
       required :burst, :uint64, 2
-
     end
   end
 end
@@ -281,19 +282,19 @@ module Warden
 
     class LimitCpuRequest
       include Warden::Protocol::BaseMessage
-
-
-      required :handle, :string, 1
-      optional :limit_in_shares, :uint64, 2
-
     end
 
     class LimitCpuResponse
       include Warden::Protocol::BaseMessage
+    end
 
+    class LimitCpuRequest
+      required :handle, :string, 1
+      optional :limit_in_shares, :uint64, 2
+    end
 
+    class LimitCpuResponse
       optional :limit_in_shares, :uint64, 1
-
     end
   end
 end
@@ -305,8 +306,13 @@ module Warden
 
     class LimitDiskRequest
       include Warden::Protocol::BaseMessage
+    end
 
+    class LimitDiskResponse
+      include Warden::Protocol::BaseMessage
+    end
 
+    class LimitDiskRequest
       required :handle, :string, 1
       optional :block_limit, :uint64, 10
       optional :block, :uint64, 11
@@ -320,13 +326,9 @@ module Warden
       optional :byte, :uint64, 31
       optional :byte_soft, :uint64, 32
       optional :byte_hard, :uint64, 33
-
     end
 
     class LimitDiskResponse
-      include Warden::Protocol::BaseMessage
-
-
       optional :block_limit, :uint64, 10
       optional :block, :uint64, 11
       optional :block_soft, :uint64, 12
@@ -339,7 +341,6 @@ module Warden
       optional :byte, :uint64, 31
       optional :byte_soft, :uint64, 32
       optional :byte_hard, :uint64, 33
-
     end
   end
 end
@@ -351,19 +352,19 @@ module Warden
 
     class LimitMemoryRequest
       include Warden::Protocol::BaseMessage
-
-
-      required :handle, :string, 1
-      optional :limit_in_bytes, :uint64, 2
-
     end
 
     class LimitMemoryResponse
       include Warden::Protocol::BaseMessage
+    end
 
+    class LimitMemoryRequest
+      required :handle, :string, 1
+      optional :limit_in_bytes, :uint64, 2
+    end
 
+    class LimitMemoryResponse
       optional :limit_in_bytes, :uint64, 1
-
     end
   end
 end
@@ -375,22 +376,22 @@ module Warden
 
     class LinkRequest
       include Warden::Protocol::BaseMessage
-
-
-      required :handle, :string, 1
-      required :job_id, :uint32, 2
-
     end
 
     class LinkResponse
       include Warden::Protocol::BaseMessage
+    end
 
+    class LinkRequest
+      required :handle, :string, 1
+      required :job_id, :uint32, 2
+    end
 
+    class LinkResponse
       optional :exit_status, :uint32, 1
       optional :stdout, :string, 2
       optional :stderr, :string, 3
       optional :info, InfoResponse, 4
-
     end
   end
 end
@@ -402,17 +403,44 @@ module Warden
 
     class ListRequest
       include Warden::Protocol::BaseMessage
-
-
-
     end
 
     class ListResponse
       include Warden::Protocol::BaseMessage
+    end
 
+    class ListRequest
+    end
 
+    class ListResponse
       repeated :handles, :string, 1
+    end
+  end
+end
+## Generated from logging.proto for warden
+require "beefcake"
 
+module Warden
+  module Protocol
+
+    class LoggingRequest
+      include Warden::Protocol::BaseMessage
+    end
+
+    class LoggingResponse
+      include Warden::Protocol::BaseMessage
+    end
+
+    class LoggingRequest
+      required :handle, :string, 1
+      required :application_id, :string, 2
+      required :instance_index, :string, 3
+      required :loggregator_router, :string, 4
+      required :loggregator_secret, :string, 5
+      repeated :drain_uris, :string, 6
+    end
+
+    class LoggingResponse
     end
   end
 end
@@ -446,11 +474,13 @@ module Warden
         Ping = 91
         List = 92
         Echo = 93
+        Logging = 1001
       end
+    end
 
+    class Message
       required :type, Message::Type, 1
       required :payload, :bytes, 2
-
     end
   end
 end
@@ -462,21 +492,21 @@ module Warden
 
     class NetInRequest
       include Warden::Protocol::BaseMessage
-
-
-      required :handle, :string, 1
-      optional :host_port, :uint32, 3
-      optional :container_port, :uint32, 2
-
     end
 
     class NetInResponse
       include Warden::Protocol::BaseMessage
+    end
 
+    class NetInRequest
+      required :handle, :string, 1
+      optional :host_port, :uint32, 3
+      optional :container_port, :uint32, 2
+    end
 
+    class NetInResponse
       required :host_port, :uint32, 1
       required :container_port, :uint32, 2
-
     end
   end
 end
@@ -488,19 +518,19 @@ module Warden
 
     class NetOutRequest
       include Warden::Protocol::BaseMessage
-
-
-      required :handle, :string, 1
-      optional :network, :string, 2
-      optional :port, :uint32, 3
-
     end
 
     class NetOutResponse
       include Warden::Protocol::BaseMessage
+    end
 
+    class NetOutRequest
+      required :handle, :string, 1
+      optional :network, :string, 2
+      optional :port, :uint32, 3
+    end
 
-
+    class NetOutResponse
     end
   end
 end
@@ -512,16 +542,16 @@ module Warden
 
     class PingRequest
       include Warden::Protocol::BaseMessage
-
-
-
     end
 
     class PingResponse
       include Warden::Protocol::BaseMessage
+    end
 
+    class PingRequest
+    end
 
-
+    class PingResponse
     end
   end
 end
@@ -533,8 +563,9 @@ module Warden
 
     class ResourceLimits
       include Warden::Protocol::BaseMessage
+    end
 
-
+    class ResourceLimits
       optional :as, :uint64, 1
       optional :core, :uint64, 2
       optional :cpu, :uint64, 3
@@ -550,7 +581,6 @@ module Warden
       optional :rtprio, :uint64, 13
       optional :sigpending, :uint64, 14
       optional :stack, :uint64, 15
-
     end
   end
 end
@@ -562,26 +592,26 @@ module Warden
 
     class RunRequest
       include Warden::Protocol::BaseMessage
+    end
 
+    class RunResponse
+      include Warden::Protocol::BaseMessage
+    end
 
+    class RunRequest
       required :handle, :string, 1
       required :script, :string, 2
       optional :privileged, :bool, 3, :default => false
       optional :rlimits, ResourceLimits, 4
       optional :discard_output, :bool, 5, :default => false
       optional :log_tag, :string, 6
-
     end
 
     class RunResponse
-      include Warden::Protocol::BaseMessage
-
-
       optional :exit_status, :uint32, 1
       optional :stdout, :string, 2
       optional :stderr, :string, 3
       optional :info, InfoResponse, 4
-
     end
   end
 end
@@ -593,23 +623,23 @@ module Warden
 
     class SpawnRequest
       include Warden::Protocol::BaseMessage
+    end
 
+    class SpawnResponse
+      include Warden::Protocol::BaseMessage
+    end
 
+    class SpawnRequest
       required :handle, :string, 1
       required :script, :string, 2
       optional :privileged, :bool, 3, :default => false
       optional :rlimits, ResourceLimits, 4
       optional :discard_output, :bool, 5, :default => false
       optional :log_tag, :string, 6
-
     end
 
     class SpawnResponse
-      include Warden::Protocol::BaseMessage
-
-
       required :job_id, :uint32, 1
-
     end
   end
 end
@@ -621,19 +651,19 @@ module Warden
 
     class StopRequest
       include Warden::Protocol::BaseMessage
-
-
-      required :handle, :string, 1
-      optional :background, :bool, 10, :default => false
-      optional :kill, :bool, 20, :default => false
-
     end
 
     class StopResponse
       include Warden::Protocol::BaseMessage
+    end
 
+    class StopRequest
+      required :handle, :string, 1
+      optional :background, :bool, 10, :default => false
+      optional :kill, :bool, 20, :default => false
+    end
 
-
+    class StopResponse
     end
   end
 end
@@ -645,22 +675,22 @@ module Warden
 
     class StreamRequest
       include Warden::Protocol::BaseMessage
-
-
-      required :handle, :string, 1
-      required :job_id, :uint32, 2
-
     end
 
     class StreamResponse
       include Warden::Protocol::BaseMessage
+    end
 
+    class StreamRequest
+      required :handle, :string, 1
+      required :job_id, :uint32, 2
+    end
 
+    class StreamResponse
       optional :name, :string, 1
       optional :data, :string, 2
       optional :exit_status, :uint32, 3
       optional :info, InfoResponse, 4
-
     end
   end
 end
