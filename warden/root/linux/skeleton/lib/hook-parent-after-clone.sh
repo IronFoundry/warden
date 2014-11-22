@@ -45,6 +45,8 @@ do
       echo "c 5:2 rw" > $instance_path/devices.allow
       # /dev/pts/*
       echo "c 136:* rw" > $instance_path/devices.allow
+      # /dev/fuse
+      echo "c 10:229 rw" > $instance_path/devices.allow
     fi
   fi
 
@@ -57,6 +59,6 @@ ip link add name $network_host_iface type veth peer name $network_container_ifac
 ip link set $network_host_iface netns 1
 ip link set $network_container_iface netns $PID
 
-ifconfig $network_host_iface $network_host_ip netmask $network_netmask
+ifconfig $network_host_iface $network_host_ip netmask $network_netmask mtu $container_iface_mtu
 
 exit 0
