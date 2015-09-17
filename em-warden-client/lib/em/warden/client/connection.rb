@@ -32,12 +32,14 @@ class EventMachine::Warden::Client::Connection < ::EM::Connection
   end
 
   def cancel_idle_timer
+    puts "!!cancel_idle_timer: connection_id: #{@connection_id}"
     @idle_timer.cancel if @idle_timer
   end
 
   def setup_idle_timer
     cancel_idle_timer
 
+    puts "!!setup_idle_timer: connection_id: #{@connection_id}"
     @idle_timer = EM::Timer.new(@idle_timeout) { idle_timeout! }
   end
 
@@ -48,6 +50,7 @@ class EventMachine::Warden::Client::Connection < ::EM::Connection
   end
 
   def idle_timeout!
+    puts "!!idle_timeout: connection_id: #{@connection_id}"
     close_connection
   end
 
@@ -59,15 +62,20 @@ class EventMachine::Warden::Client::Connection < ::EM::Connection
     @idle_timer   = nil
     @idle_timeout = IDLE_TIMEOUT
 
+    @connection_id = Time.now.to_f
+
     on(:connected) do
+      puts "!!connected: connection_id: #{@connection_id}"
       @connected = true
     end
 
     on(:disconnected) do
+      puts "!!disconnected[1]: connection_id: #{@connection_id}"
       @connected = false
     end
 
     on(:disconnected) do
+      puts "!!disconnected[2]: connection_id: #{@connection_id}"
       # Execute callback for pending requests
       response = EventMachine::Warden::Client::ConnectionError.new("Disconnected")
       while !@requests.empty?
@@ -84,10 +92,12 @@ class EventMachine::Warden::Client::Connection < ::EM::Connection
   end
 
   def connection_completed
+    puts "!!connection_completed: connection_id: #{@connection_id}"
     emit(:connected)
   end
 
   def unbind
+    puts "!!unbind: connection_id: #{@connection_id}"
     emit(:disconnected)
   end
 
